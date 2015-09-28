@@ -2,7 +2,8 @@
   (:gen-class)
   (:require [clj-http.client :as client]
             [clojure-csv.core :as csv])
-  (:import (java.util Calendar)))
+  (:import (java.util Calendar)
+           (java.text SimpleDateFormat)))
 
 (def mystocks
   ["PUT STOCKS HERE"])
@@ -108,12 +109,18 @@
   (let [input (read-line) ]
     (print-update (get-stock-quotes))))
 
+(defn current-datetime []
+  (.format (SimpleDateFormat. "yyyy/MM/dd HH:mm:ss") (.getTime (Calendar/getInstance))))
+
+(defn poll []
+  (println (str "RETRIEVING QUOTE AT: " (current-datetime)))
+  (print-update (get-stock-quotes))
+  (Thread/sleep 300000))                                    ;poll every 5 minutes
+
 (def session
   (let [portfolio (clojure.string/join "," mystocks)]
     (while true
-      (println "<return> to poll again")
-      (flush)
-      (interact portfolio))))
+      (poll))))
 
 (defn -main [& args]
   (session))

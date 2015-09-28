@@ -7,6 +7,6 @@
                  [clj-http "2.0.0"]
                  [org.clojure/tools.cli "0.2.4"]
                  [clojure-csv "2.0.1"]]
-  :main ^:skip-aot stocker.core
-  :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:dev {:dependencies [[ring/ring-devel "1.4.0"]]}}
+  :main stocker.core
+  :aot [stocker.core])
