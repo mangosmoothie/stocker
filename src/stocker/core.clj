@@ -1,12 +1,11 @@
 (ns stocker.core
   (:gen-class)
   (:require [clj-http.client :as client]
-            [clojure-csv.core :as csv])
+            [clojure-csv.core :as csv]
+            [clojure.tools.cli :refer [parse-opts]]
+            [clojure.pprint :refer [print-table]])
   (:import (java.util Calendar)
            (java.text SimpleDateFormat)))
-
-(def mystocks
-  ["PUT STOCKS HERE"])
 
 (def indv-stock-query-data-description
   (let [data-desc {:symbol             {:code "s" :orderHint 10 :typeHint "string"}
@@ -17,16 +16,14 @@
                    :yearLow            {:code "j" :orderHint 60 :typeHint 1.01}
                    :lastTradePrice     {:code "l1" :orderHint 70 :typeHint 1.01}
                    :openPrice          {:code "o" :orderHint 80 :typeHint 1.01}
-                   :previousClosePrice {:code "p" :orderHint 90 :typeHint 1.01}
-                   :afterHoursRealtime {:code "c8" :orderHint 100 :typeHint 1.01}}]
+                   :previousClosePrice {:code "p" :orderHint 90 :typeHint 1.01}}]
     (into (sorted-map-by (fn [key1 key2]
                            (compare (:orderHint (key1 data-desc))
                                     (:orderHint (key2 data-desc)))))
           data-desc)))
 
 (def styles
-  {:header    "\033[95m"
-   :blue      "\033[94m"
+  {:blue      "\033[94m"
    :green     "\033[92m"
    :yellow    "\033[93m"
    :red       "\033[91m"
@@ -46,11 +43,7 @@
       (str (:red styles) pct-str))))
 
 (defn print-update [stockdata]
-  (loop [data stockdata]
-    (when (seq data)
-      (let [curr (first data)]
-        (println (str (:symbol curr) " " (:lastTradePrice curr) " " (format-pct-change (:percentChange curr))))
-        (recur (rest data))))))
+  (print-table [:symbol :lastTradePrice :yearHigh :yearLow :volume :avgDailyVolume :change] (map #(assoc % :change (format-pct-change (:percentChange %))) stockdata)))
 
 (defn scan-for-notable-movement [query-results]
   (reduce
@@ -87,7 +80,7 @@
       (and (<= 9 (.get (Calendar/getInstance) Calendar/HOUR_OF_DAY) 15)
            (< 1 (.get (Calendar/getInstance) Calendar/DAY_OF_WEEK) 7))
       base-options
-      (str base-options "c8"))))
+      base-options)))                                       ;do something different if it's after hours?
 
 (defn csv->objects [data-desc csv]
   (reduce
@@ -97,51 +90,40 @@
     []
     csv))
 
-(defn get-stock-quotes []
-  (let [data-desc indv-stock-query-data-description
-        portfolio (clojure.string/join "," mystocks)]
+(defn get-stock-quotes [portfolio]
+  (let [data-desc indv-stock-query-data-description]
     (->> (get-stock-price-csv portfolio (build-options data-desc))
          (csv/parse-csv)
          (csv->objects data-desc)
          (add-pct-change))))
 
-(defn interact [stocks]
-  (let [input (read-line) ]
-    (print-update (get-stock-quotes))))
-
 (defn current-datetime []
   (.format (SimpleDateFormat. "yyyy/MM/dd HH:mm:ss") (.getTime (Calendar/getInstance))))
 
-(defn poll []
+(defn poll [portfolio]
   (println (str "RETRIEVING QUOTE AT: " (current-datetime)))
-  (print-update (get-stock-quotes))
+  (print-update (get-stock-quotes portfolio))
   (Thread/sleep 300000))                                    ;poll every 5 minutes
 
-(def session
-  (let [portfolio (clojure.string/join "," mystocks)]
-    (while true
-      (poll))))
+(defn session [portfolio]
+  (while true
+    (poll portfolio)))
+
+(def cli-options
+  [["-p" "--portfolio PORTFOLIO" "Your stocks to watch"
+    :parse-fn #(clojure.string/split % #",")
+    :default ["GOOG" "YHOO"]]
+   ["-s" "--super" "super mode"]
+   ["-h" "--help"]])
+
+(defn exit [status msg]
+  (println msg)
+  (System/exit status))
 
 (defn -main [& args]
-  (session))
-
-;(defn -main [& args]
-;  (let [[opts args banner] (cli args
-;  [& args]
-;                                ["-h" "--help" "Print this help"
-;                                 :default false :flag true])]
-;    (when (:help opts)
-;      (println banner))))
-
-;class bcolors:
-;HEADER = '\033[95m'
-;OKBLUE = '\033[94m'
-;OKGREEN = '\033[92m'
-;WARNING = '\033[93m'
-;FAIL = '\033[91m'
-;ENDC = '\033[0m'
-;BOLD = '\033[1m'
-;UNDERLINE = '\033[4m'
-;
-;
-;
+  (let [options (parse-opts args cli-options)
+        portfolio (:portfolio (:options options))]
+    (cond
+      (:help (:options options)) (exit 0 (:summary options))
+      (seq portfolio) (session (:portfolio (:options options)))
+      :else (exit 1 ("NEED STOCKS TO POLL ->> OPTION -h FOR HELP")))))
