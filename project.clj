@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [clj-http "2.0.0"]
-                 [org.clojure/tools.cli "0.2.4"]
+                 [org.clojure/tools.cli "0.3.3"]
                  [clojure-csv "2.0.1"]]
   :profiles {:dev {:dependencies [[ring/ring-devel "1.4.0"]]}}
   :main stocker.core
