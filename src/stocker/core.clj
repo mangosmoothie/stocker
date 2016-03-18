@@ -3,7 +3,8 @@
   (:require [clj-http.client :as client]
             [clojure-csv.core :as csv]
             [clojure.tools.cli :refer [parse-opts]]
-            [clojure.pprint :refer [print-table]])
+            [clojure.pprint :refer [print-table]]
+            [stocker.util :refer :all])
   (:import (java.util Calendar)
            (java.text SimpleDateFormat)))
 
@@ -76,9 +77,7 @@
 
 (defn build-options [data-description]
   (let [base-options (clojure.string/join (map :code (vals data-description)))]
-    (if
-      (and (<= 9 (.get (Calendar/getInstance) Calendar/HOUR_OF_DAY) 15)
-           (< 1 (.get (Calendar/getInstance) Calendar/DAY_OF_WEEK) 7))
+    (if (market-open?)
       base-options
       base-options)))                                       ;do something different if it's after hours?
 
@@ -113,7 +112,6 @@
   [["-p" "--portfolio PORTFOLIO" "Your stocks to watch"
     :parse-fn #(clojure.string/split % #",")
     :default ["GOOG" "YHOO"]]
-   ["-s" "--super" "super mode"]
    ["-h" "--help"]])
 
 (defn exit [status msg]
