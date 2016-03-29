@@ -44,7 +44,8 @@
       (str (:red styles) pct-str))))
 
 (defn print-update [stockdata]
-  (print-table [:symbol :lastTradePrice :yearHigh :yearLow :volume :avgDailyVolume :change] (map #(assoc % :change (format-pct-change (:percentChange %))) stockdata)))
+  (print-table [:symbol :lastTradePrice :yearHigh :yearLow :volume :avgDailyVolume :change] 
+               (map #(assoc % :change (format-pct-change (:percentChange %))) stockdata)))
 
 (defn scan-for-notable-movement [query-results]
   (reduce

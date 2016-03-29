@@ -1,0 +1,279 @@
+{"filings": {
+   2015: {
+     "10-Q-1": {
+       "filingDate": "2015-04-24",
+       "forms": {
+         "CONSOLIDATED-STATEMENTS-OF-CASH-FLOWS": {
+           "unitMultiplier": 1000000,
+           "beginningCash": 14557,
+           "beginningCashPrev": 8658,
+           "OPERATING-ACTIVITIES": {
+             "netIncome": -57,
+             "netIncomePrev": 108,
+             "Adjustments to reconcile net income (loss) to net cash from operating activities": {
+               "depreciation": 1426,
+               "depreciationPrev": 1010,
+               "stockBasedCompensation": 407,
+               "stockBasedCompensationPrev": 321,
+               "otherOperatingExpenses": 44,
+               "otherOperatingExpensesPrev": 35,
+               "lossesOnSalesOfSecurities": 1,
+               "otherExpenses": 91,
+               "defferedIncomeTaxes": -2
+               "defferedIncomeTaxesPrev": -185,
+               "excessTaxBenefitsFromStockBasedCompensation": -22,
+               "excessTaxBenefitsFromStockBasedCompensationPrev": -121
+             },
+             "Changes in operating assets and liabilities": {
+               "inventories": 721,
+               "inventoriesPrev": 699,
+               "accountsReceivable": 441,
+               "accountsReceivablePrev": 727,
+               "accountsPayable": -4249,
+               "accountsPayablePrev": -4675,
+               "accruedExpenses": -940,
+               "accruedExpensesPrev": -731,
+               "additionsToUnearnedRevenue": 1803,
+               "additionsToUnearnedRevenuePrev": 1092,
+               "amortizationOfPreviouslyUnearnedRevenue": -1163,
+               "amortizationOfPreviouslyUnearnedRevenuePrev": -732
+             }
+           },
+           "netCashProvidedByOperatingActivities": -1499,
+           "netCashProvidedByOperatingActivitiesPrev": -2502,
+           "INVESTING-ACTIVITIES": {
+             "purchesesOfPropertyAndEquipment": -871,
+             "purchesesOfPropertyAndEquipmentPrev": -1080,
+             "acquisitions": -365,
+             "salesAndMaturitiesOfMarketableSecurities": 375,
+             "salesAndMaturitiesOfMarketableSecuritiesPrev": 593,
+             "purchasesOfMarketableSecurities": -986,
+             "purchasesOfMarketableSecuritiesPrev": -437
+           },
+           "netCashProvidedByInvestingActivities": -1847,
+           "netCashProvidedByInvestingActivitiesPrev": -924,
+           "FINANCING-ACTIVITIES": {
+             "excessTaxBenefitsFromStockBasedCompensation": 22,
+             "excessTaxBenefitsFromStockBasedCompensationPrev": 121,
+             "proceededFromLongTermDebt": 183,
+             "proceededFromLongTermDebtPrev": 65,
+             "repaymentsOfLongTermDebt": -316,
+             "repaymentsOfLongTermDebtPrev": -70,
+             "principalRepaymentsOfCapitalLeaseObligations": -502,
+             "principalRepaymentsOfCapitalLeaseObligationsPrev": -249,
+             "principalRepaymentsOfFinanceLeaseObligations": -39,
+             "principalRepaymentsOfFinanceLeaseObligationsPrev": -42
+           },
+           "netCashProvidedByFinancingActivities": -652,
+           "netCashProvidedByFinancingActivitiesPrev": -175,
+           "foreignCurrencyEffectOnCash": -322,
+           "foreignCurrencyEffectOnCashPrev": -17,
+           "netIncreaseInCash": -4320,
+           "netIncreaseInCashPrev": -3584,
+           "endingCash": 10237,
+           "endingCashPrev": 5074,
+           "SUPPLEMENTAL-CASH-FLOW-INFORMATION": {
+             "cashPaidForInterestOnLongTermDebt": 17,
+             "cashPaidForInterestOnLongTermDebtPrev": 18,
+             "propertyAndEquipmentAcquiredUnderCapitalLeases": 954,
+             "propertyAndEquipmentAcquiredUnderCapitalLeasesPrev": 716,
+             "propertyAndEquipmentAcquiredUnderBuildToSuitLeases": 103,
+             "propertyAndEquipmentAcquiredUnderBuildToSuitLeasesPrev": 126
+           }
+         },
+         "CONSOLIDATED-STATEMENTS-OF-OPERATIONS": {
+           "unitMultiplier": 1000000,
+           "netProductSales": 17084,
+           "netProductSalesPrev": 15705,
+           "netServiceSales": 5633,
+           "netServiceSalesPrev": 4036,
+           "totalNetSales": 22717,
+           "totalNetSalesPrev": 19741,
+           "OPERATING-EXPENSES": {
+             "costOfSales": 15395,
+             "costOfSalesPrev": 14055,
+             "fulfillment": 2759,
+             "fulfillmentPrev": 2317,
+             "marketing": 1083,
+             "marketingPrev": 870,
+             "technologyAndContent": 2754,
+             "technologyAndContentPrev": 1991,
+             "generalAndAdministrative": 427,
+             "generalAndAdministrativePrev": 327,
+             "otherOperatingExpenses": 44,
+             "otherOperatingExpensesPrev": 35
+           },
+           "totalOperatingExpenses": 22462,
+           "totalOperatingExpensesPrev": 19595,
+           "incomeFromOperations": 255,
+           "incomeFromOperationsPrev": 146,
+           "NON-OPERATING-EXPENSES": {
+             "interestIncome": 11,
+             "interestIncomePrev": 11,
+             "interestExpense": -115,
+             "interestExpensePrev": -42,
+             "otherIncome": -130,
+             "otherIncomePrev": 5
+           },
+           "totalNonOperatingIncome": -234,
+           "totalNonOperatingIncomePrev": -26
+           "incomeBeforeIncomeTaxes": 21,
+           "incomeBeforeIncomeTaxesPrev": 120,
+           "provisionForIncomeTaxes": -71,
+           "provisionForIncomeTaxesPrev": -73,
+           "netIncome": -57,
+           "netIncomePrev": 108,
+           "basicEarningsPerShare": -0.12,
+           "basicEarningsPerSharePrev": 0.23,
+           "dilutedEarningsPerShare": -0.12,
+           "dilutedEarningsPerSharePrev": 0.23,
+           "Weighted average shares used in computation of earnings per share": {
+             "basic": 465,
+             "basicPrev": 460,
+             "diluted": 465,
+             "dilutedPrev": 468
+           }
+         },
+         "CONSOLIDATED-STATEMENTS-OF-COMPREHENSIVE-INCOME": {
+           "unitMultiplier": 1000000,
+           "netIncome": -57,
+           "netIncomePrev": 108,
+           "OTHER-COMPREHENSIVE-INCOME": {
+             "foreignCurrencyTranslationAdjustments": -243,
+             "foreignCurrencyTranslationAdjustmentsPrev": 27,
+             "other": 2,
+             "otherPrev": 1
+           },
+           "totalOtherComprehensiveIncome": -241,
+           "totalOtherComprehensiveIncomePrev": 28,
+           "comprehensiveIncome": -298,
+           "comprehensiveIncomePrev": 136
+         },
+         "CONSOLIDATED-BALANCE-SHEETS": {
+           "unitMultiplier": 1000000,
+           "CURRENT-ASSETS": {
+             "cash": 10237,
+             "cashPrev": 14557,
+             "marketableSecurities": 3544,
+             "marketableSecuritiesPrev": 2859,
+             "inventories": 7369,
+             "inventoriesPrev": 8299,
+             "accountsReceivable": 4772,
+             "accountsReceivablePrev": 5612
+           },
+           "totalCurrentAssets": 25922,
+           "totalCurrentAssetsPrev": 31327,
+           "propertyAndEquipment": 17736,
+           "propertyAndEquipmentPrev": 16967,
+           "goodwill": 3491,
+           "goodwillPrev": 3319,
+           "otherAssets": 2926,
+           "otherAssetsPrev": 2892,
+           "totalAssets": 50075,
+           "totalAssetsPrev": 54505,
+           "CURRENT-LIABILIITIES": {
+             "accountsPayable": 11917,
+             "accountsPayablePrev": 16459,
+             "accruedExpenses": 8840,
+             "accruedExpensesPrev": 9807,
+             "undearnedRevenue": 2420,
+             "undearnedRevenuePrev": 1823
+           },
+           "totalCurrentLiabilities": 23177,
+           "totalCurrentLiabilitiesPrev": 28089,
+           "longTermDebt": 8257,
+           "longTermDebtPrev": 8265,
+           "otherLongTermLiabilities": 7768,
+           "otherLongTermLiabilitiesPrev": 7410,
+           "STOCKHOLDERS-EQUITY": {
+             "Common stock, $0.01 par value: outstanding shares - 466 and 465": 5,
+             "Common stock, $0.01 par value: outstanding shares - 466 and 465 prev": 5,
+             "treasuryStock": -1837,
+             "treasuryStockPrev": -1837,
+             "additionalPaidInCapital": 11565,
+             "additionalPaidInCapitalPrev": 11135,
+             "accumulatedOtherComprehensiveLoss": -752,
+             "accumulatedOtherComprehensiveLossPrev": -511,
+             "retainedEarnings": 1892,
+             "retainedEarningsPrev": 1949
+           },
+           "totalStockholdersEquity": 10873,
+           "totalStockholdersEquityPrev": 10741,
+           "totalLiabilitiesAndStockholdersEquity": 50075,
+           "totalLiabilitiesAndStockholdersEquityPrev": 54505
+         },
+         "SEGMENTED-NET-INCOME": {
+           "unitMultiplier": 1000000,
+           "NORTH-AMERICA": {
+             "netSales": 13406,
+             "netSalesPrev": 10808,
+             "operatingExpenses": 12889,
+             "operatingExpensesPrev": 10518
+             "operatingIncome": 517,
+             "operatingIncomePrev": 290,
+           },
+           "INTERNATIONAL": {
+             "netSales": 7745,
+             "netSalesPrev": 7883,
+             "operatingExpenses": 7821,
+             "operatingExpensesPrev": 7916,
+             "operatingIncome": -76,
+             "operatingIncomePrev": -33
+           },
+           "AWS": {
+             "netSales": 1566,
+             "netSalesPrev": 1050,
+             "operatingExpenses": 1301,
+             "operatingExpensesPrev": 805,
+             "operatingIncome": 265,
+             "operatingIncomePrev": 245
+           },
+           "CONSOLIDATED": {
+             "netSales": 22717,
+             "netSalesPrev": 19741,
+             "operatingExpenses": 22011,
+             "operatingExpensesPrev": 19239,
+             "operatingIncome": 706,
+             "operatingIncomePrev": 502,
+             "stockBasedCompensation": -407,
+             "stockBasedCompensationPrev": -321,
+             "otherOperatingIncome": -44,
+             "otherOperatingIncomePrev": -35,
+             "incomeFromOperations": 255,
+             "incomeFromOperationsPrev": 146,
+             "totalNonOperatingIncome": -234,
+             "totalNonOperatingIncomePrev": -26,
+             "provisionForIncomeTaxes": -71,
+             "provisionForIncomeTaxesPrev": -73,
+             "equityMethodInvesmentActivity": -7,
+             "equityMethodInvesmentActivityPrev": 61,
+             "netIncome": -57,
+             "netIncomePrev": 108
+           }
+         }
+       }
+     }
+   }
+}}
+
+
+         
+         
+           
+             
+         
+
+             
+           
+           
+
+             
+             
+           
+             
+
+             
+             
+             
+               "
+             "inventories": 
