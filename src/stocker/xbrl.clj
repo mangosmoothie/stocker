@@ -2,21 +2,22 @@
   (:require [clojure.xml :as xml]
             [clj-http.client :as client]
             [clojure.pprint :refer [pprint]]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clojure.data.json :as json])
   (:import (java.util Calendar)
            (java.io File)))
 
 ;;(clojure.core/refer 'clojure.core)
 ;;(clojure.core/refer 'clojure.repl)
 
-(def amzn-test-q1  "/Users/nlloyd/projects/stocker/testdata/amzn-20150331.xml")
 (def edgar-monthly-feed-base "https://www.sec.gov/Archives/edgar/monthly/")
 (def working-dir "/Users/nlloyd/sec/")
 (def landingzone (str working-dir "landingzone/"))
 (def feed-cache (str working-dir "feeds/"))
-(def ciks {"AMZN" "0001018724"})
+(def ticker-search-url "https://www.sec.gov/cgi-bin/browse-edgar?company=&match=&CIK=%s&owner=exclude&Find=Find+Companies&action=getcompany")
+(def starter-tickers ["AMZN", "NFLX", "AAPL"])
+(def starter-ciks {"AMZN" "0001018724"})
 (def form-types #{"10-K" "10-Q"})
-(def tst-rss "/Users/nlloyd/Downloads/xbrlrss-2015-04.xml")
 
 (defn in? 
   "coll contains item?"
@@ -34,8 +35,14 @@
   (let [slash-index (.lastIndexOf url "/")]
     (subs url (inc slash-index))))
 
+(defn get-cik
+  "grab the cik using the sec quick search"
+  [ticker]
+  (second (re-find #"CIK=(\d{10})"
+                   (str (client/get (format ticker-search-url ticker))))))
+
 (defn gen-cache-filepath
-  "generate a filename, local file path and file"
+  "generate a filename, local filepath and file"
   [url cache-dir]
   (let [filename (filename-from-url url)
         filepath (str cache-dir filename)]
@@ -66,7 +73,8 @@
   (map #(get-cached-file % output-dir) xbrlrss-urls))
 
 (defn xbrlrss-urls
-  "return the rss feed urls for xbrls downloads from the SEC EDGAR system (beg-month & end-month are inclusive)"
+  "return the rss feed urls for xbrls downloads from the SEC EDGAR system 
+  (beg-month & end-month are inclusive)"
   ([year] (if (= year (.get (Calendar/getInstance) (Calendar/YEAR)))
             (xbrlrss-urls year 1 (inc (.get (Calendar/getInstance) (Calendar/MONTH))))
             (xbrlrss-urls year 1 12)))
@@ -118,13 +126,42 @@
 (defn dic [a-map contains]
   (pprint (find-entries a-map contains)))
 
+(defn write-ciks
+  [dir ciks]
+  (let [filepath (str dir "ciks.data")]
+    (with-open [wrtr (io/writer filepath)]
+      (.write wrtr (json/write-str ciks)))))
+
+(defn read-ciks
+  [dir]
+  (let [filepath (str dir "ciks.data")
+        config-file (File. filepath)]
+    (if (.exists config-file)
+      (json/read-str (slurp filepath))
+      starter-ciks)))
+
+(defn populate-ciks
+  "read ciks from file, check tickers against ciks map
+  use sec ticker search to find missing ciks of the company"
+  [tickers dir]
+  (let [ciks (read-ciks dir)
+        new-tickers (filter #(not (contains? ciks %)) tickers)]
+    (merge ciks
+           (reduce
+            (fn [acc ticker]
+              (assoc acc ticker (get-cik ticker)))
+            {}
+            new-tickers))))
+
 (defn get-artifacts-for-year
   "retrieves monthly historical rss feeds for year"
   [year output-dir]
   (println "fetching rss feeds for year: " year)
   (println "output dir is: " output-dir)
   (println "duplicates will not be overwritten")
-  (let [urls (get-xbrl-zip-urls year form-types (vals ciks))]
+  (let [ciks (populate-ciks starter-tickers working-dir)
+        urls (get-xbrl-zip-urls year form-types (vals (read-ciks working-dir)))]
+    (write-ciks working-dir ciks)
     (doseq [url urls]
       (download-file url output-dir))
     (println "all files accounted for. processed url count: " (count urls))))
@@ -134,4 +171,3 @@
   "get rss links from index for a given year"
   [year]
   )
-

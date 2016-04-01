@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [clj-http "2.0.0"]
                  [org.clojure/tools.cli "0.3.3"]
-                 [clojure-csv "2.0.1"]]
+                 [clojure-csv "2.0.1"]
+                 [org.clojure/data.json "0.2.6"]]
   :profiles {:dev {:dependencies [[ring/ring-devel "1.4.0"]]}}
   :main stocker.core
   :aot [stocker.core])
