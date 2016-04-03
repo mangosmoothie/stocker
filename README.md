@@ -1,36 +1,5 @@
 # stocker
 
-FIXME: description
+this is currently a clojure command line app in early development.
 
-## Installation
-
-Download from http://example.com/FIXME.
-
-## Usage
-
-FIXME: explanation
-
-    $ java -jar stocker-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2015 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+started as a way to track stock-prices throughout the day and detect significant movements. added the ability to download, cache, parse and mine the financial statements of public companies using the sec's edgar system focusing on the xbrl reports of 10-Q and 10-K filings initially.
