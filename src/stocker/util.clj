@@ -29,6 +29,10 @@
   (let [dir (File. dirpath)]
     (filter #(.isFile %) (.listFiles dir))))
 
+(defn get-zip-out-dir
+  [zipfile outdirpath]
+  (File. (str outdirpath (File/separator) (strip-extension (.getName zipfile)))))
+
 (defn get-zip-files
   "return all .zip files in a given dir path"
   [dirpath]
@@ -44,7 +48,7 @@
   "decompress zip file and save to location - preserving filenames"
   [zipfile outdirpath]
   (let [buffer (byte-array 1024)
-        outdir (File. (str outdirpath (File/separator) (strip-extension (.getName zipfile))))]
+        outdir (get-zip-out-dir zipfile outdirpath)]
     (.mkdir outdir)
     (println "unzipping " (.getPath zipfile))
     (with-open [zis (ZipInputStream. (FileInputStream. zipfile))]
@@ -66,7 +70,7 @@
   "unzip all .zip files in dirpath"
   [dirpath outdirpath]
   (doseq [zipfile (get-zip-files dirpath)]
-    (if (.exists (File. (str outdirpath (File/separator) (strip-extension (.getName zipfile)))))
+    (if (.exists (get-zip-out-dir zipfile outdirpath))
       (println "skipping file, output dir exists for " (.getPath zipfile))
       (unzip-file zipfile outdirpath))))
 
