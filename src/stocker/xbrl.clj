@@ -105,15 +105,42 @@
   [year form-types cik-nums feed-dir]
   (flatten (map #(parse-xbrlrss % form-types cik-nums) (get-xbrlrss-feeds year feed-dir))))
 
-(defn parse-xbrl-gaap [filename context]
-  (into {} 
-        (map #(vector (:tag %) (:content %)) 
-             (->> (xml/parse filename) 
-                  :content 
-                  (filter #(and 
-                            (.startsWith (str (:tag %)) ":us-gaap:")
-                            (= context (->> % :attrs :contextRef))
-                            (not (.endsWith (str (:tag %)) "TextBlock"))))))))
+(defn parse-xbrl
+  "parse xbrl file at filepath (str) with tag-prefix (ex: \":us-gaap:\")
+  
+  if no conext: returns nested map of :tag \"CONTEXT\" [vals] for given tag prefix
+  
+  if context: returns map of :tag [vals] for given tag prefix 
+  context is a string (ex: \"FD2015Q1YTD\")"
+  ([filepath tag-prefix]
+   (into {} 
+         (apply merge-with merge
+                (map #(assoc-in {} [(% 0) (% 1)] (% 2))
+                     (map #(vector (:tag %) (:contextRef (:attrs %)) (:content %))
+                          (->> (xml/parse filepath)
+                               :content
+                               (filter #(and
+                                         (.startsWith (str (:tag %)) tag-prefix)
+                                         (not (.endsWith (str (:tag %)) "TextBlock"))))))))))
+  ([filepath tag-prefix context]
+   (into {} 
+         (map #(vector (:tag %) (:content %)) 
+              (->> (xml/parse filepath) 
+                   :content 
+                   (filter #(and 
+                             (.startsWith (str (:tag %)) tag-prefix)
+                             (= context (->> % :attrs :contextRef))
+                             (not (.endsWith (str (:tag %)) "TextBlock")))))))))
+
+(defn parse-xbrl-gaap 
+  "retrieve gaap items for given context (ex: \"FD2015Q1YTD\")"
+  [filepath context]
+  (parse-xbrl filename ":us-gaap:" context))
+
+(defn parse-xbrl-dei
+  "retrieve the doc metadata"
+  [filename]
+  (parse-xbrl filename ":dei:"))
 
 (defn find-entries 
   "filter the map by keys containing a string"
