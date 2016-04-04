@@ -29,7 +29,7 @@
   (let [dir (File. dirpath)]
     (filter #(.isFile %) (.listFiles dir))))
 
-(defn get-zip-out-dir
+(defn- get-zip-out-dir
   [zipfile outdirpath]
   (File. (str outdirpath (File/separator) (strip-extension (.getName zipfile)))))
 
@@ -38,7 +38,7 @@
   [dirpath]
   (filter #(.endsWith (.getName %) ".zip") (get-files dirpath)))
 
-(defn zip-entries
+(defn- zip-entries
   [zipfile]
   (lazy-seq
    (if-let [entry (.getNextEntry zipfile)]

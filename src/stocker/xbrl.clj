@@ -11,13 +11,14 @@
 ;;(clojure.core/refer 'clojure.repl)
 
 (def edgar-monthly-feed-base "https://www.sec.gov/Archives/edgar/monthly/")
-(def working-dir "/Users/nlloyd/sec/")
-(def landingzone (str working-dir "landingzone/"))
-(def feed-cache (str working-dir "feeds/"))
+(def working-dir "/Users/nlloyd/sec")
+(def landingzone (str working-dir File/separator "landingzone"))
+(def feed-cache (str working-dir File/separator "feeds"))
 (def ticker-search-url "https://www.sec.gov/cgi-bin/browse-edgar?company=&match=&CIK=%s&owner=exclude&Find=Find+Companies&action=getcompany")
 (def starter-tickers ["AMZN", "NFLX", "AAPL"])
 (def starter-ciks {"AMZN" "0001018724"})
 (def form-types #{"10-K" "10-Q"})
+(def amzn2015q1 "/Users/nlloyd/sec/reports/0001018724-15-000038-xbrl/amzn-20150331.xml")
 
 (defn in? 
   "coll contains item?"
@@ -45,7 +46,7 @@
   "generate a filename, local filepath and file"
   [url cache-dir]
   (let [filename (filename-from-url url)
-        filepath (str cache-dir filename)]
+        filepath (str cache-dir File/separator filename)]
     (vector  filename filepath (File. filepath))))
 
 (defn download-file [url output-dir]
@@ -101,8 +102,8 @@
 
 (defn get-xbrl-zip-urls
   "return the xbrl zip urls given a year, form types and CIKs (company Ids)"
-  [year form-types cik-nums]
-  (flatten (map #(parse-xbrlrss % form-types cik-nums) (get-xbrlrss-feeds year feed-cache))))
+  [year form-types cik-nums feed-dir]
+  (flatten (map #(parse-xbrlrss % form-types cik-nums) (get-xbrlrss-feeds year feed-dir))))
 
 (defn parse-xbrl-gaap [filename context]
   (into {} 
@@ -123,18 +124,15 @@
                              (not (.endsWith (str %) "TextBlock"))) 
                        (keys a-map))))
 
-(defn dic [a-map contains]
-  (pprint (find-entries a-map contains)))
-
 (defn write-ciks
   [dir ciks]
-  (let [filepath (str dir "ciks.data")]
+  (let [filepath (str dir File/separator "ciks.data")]
     (with-open [wrtr (io/writer filepath)]
       (.write wrtr (json/write-str ciks)))))
 
 (defn read-ciks
   [dir]
-  (let [filepath (str dir "ciks.data")
+  (let [filepath (str dir File/separator "ciks.data")
         config-file (File. filepath)]
     (if (.exists config-file)
       (json/read-str (slurp filepath))
@@ -153,18 +151,30 @@
             {}
             new-tickers))))
 
+(defn remove-current-rss-feed
+  "removes the cached rss feed for the current month"
+  [dir]
+  (let [curryear (.get (Calendar/getInstance) (Calendar/YEAR))
+        calmonth (.get (Calendar/getInstance) (Calendar/MONTH))
+        currmonth (if (< calmonth 9) (str "0" (inc calmonth)) (str (inc calmonth)))]
+    (io/delete-file (str dir File/separator "xbrlrss-" curryear "-" currmonth ".xml"))))
+
 (defn get-artifacts-for-year
-  "retrieves monthly historical rss feeds for year"
-  [year output-dir]
+  "retrieves artifacts by monthly historical rss feeds for year"
+  [year]
   (println "fetching rss feeds for year: " year)
-  (println "output dir is: " output-dir)
+  (println "output dir is: " landingzone)
   (println "duplicates will not be overwritten")
   (let [ciks (populate-ciks starter-tickers working-dir)
-        urls (get-xbrl-zip-urls year form-types (vals (read-ciks working-dir)))]
+        urls (get-xbrl-zip-urls year form-types (vals (read-ciks working-dir)) feed-cache)]
     (write-ciks working-dir ciks)
     (doseq [url urls]
-      (download-file url output-dir))
-    (println "all files accounted for. processed url count: " (count urls))))
+      (download-file url landingzone))
+    (println "all files accounted for. processed url count: " (count urls))
+    (if (= year (.get (Calendar/getInstance) (Calendar/YEAR)))
+      (do
+        (println "removing current rss feed cache")
+        (remove-current-rss-feed feed-cache)))))
 
 
 (defn parse-rss-feed-links-for-year
