@@ -18,7 +18,6 @@
 (def starter-tickers ["AMZN", "NFLX", "AAPL"])
 (def starter-ciks {"AMZN" "0001018724"})
 (def form-types #{"10-K" "10-Q"})
-(def amzn2015q1 "/Users/nlloyd/sec/reports/0001018724-15-000038-xbrl/amzn-20150331.xml")
 
 (defn in? 
   "coll contains item?"
@@ -135,7 +134,7 @@
 (defn parse-xbrl-gaap 
   "retrieve gaap items for given context (ex: \"FD2015Q1YTD\")"
   [filepath context]
-  (parse-xbrl filename ":us-gaap:" context))
+  (parse-xbrl filepath ":us-gaap:" context))
 
 (defn parse-xbrl-dei
   "retrieve the doc metadata"
@@ -186,6 +185,26 @@
         currmonth (if (< calmonth 9) (str "0" (inc calmonth)) (str (inc calmonth)))]
     (io/delete-file (str dir File/separator "xbrlrss-" curryear "-" currmonth ".xml"))))
 
+(defn get-xbrl-report
+  [dir]
+  ())
+
+(defn get-report-dirs
+  [cik dir year]
+  (filter #(.startsWith (.getName %) (str cik "-" (.substring (str 2016) 2))) 
+          (.listFiles (File. dir))))
+
+(defn find-10k
+  [cik reportcache year]
+  (let [dirs (get-report-dirs cik reportcache year)]
+    (loop [dir dirs
+           file (get-xbrl-report dir)]
+      ())))
+
+(defn find-latest-10k
+  [cik dir]
+  ())
+
 (defn get-artifacts-for-year
   "retrieves artifacts by monthly historical rss feeds for year"
   [year]
@@ -202,7 +221,6 @@
       (do
         (println "removing current rss feed cache")
         (remove-current-rss-feed feed-cache)))))
-
 
 (defn parse-rss-feed-links-for-year
   "get rss links from index for a given year"
