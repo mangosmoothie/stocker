@@ -1,5 +1,6 @@
 (ns stocker.xbrl
-  (:require [clojure.xml :as xml]
+  (:require [stocker.util :refer :all]
+            [clojure.xml :as xml]
             [clj-http.client :as client]
             [clojure.pprint :refer [pprint]]
             [clojure.java.io :as io]
@@ -9,15 +10,6 @@
 
 ;;(clojure.core/refer 'clojure.core)
 ;;(clojure.core/refer 'clojure.repl)
-
-(def edgar-monthly-feed-base "https://www.sec.gov/Archives/edgar/monthly/")
-(def working-dir "/Users/nlloyd/sec")
-(def landingzone (str working-dir File/separator "landingzone"))
-(def feed-cache (str working-dir File/separator "feeds"))
-(def ticker-search-url "https://www.sec.gov/cgi-bin/browse-edgar?company=&match=&CIK=%s&owner=exclude&Find=Find+Companies&action=getcompany")
-(def starter-tickers ["AMZN", "NFLX", "AAPL"])
-(def starter-ciks {"AMZN" "0001018724"})
-(def form-types #{"10-K" "10-Q"})
 
 (defn in? 
   "coll contains item?"
@@ -151,18 +143,14 @@
                        (keys a-map))))
 
 (defn write-ciks
-  [dir ciks]
-  (let [filepath (str dir File/separator "ciks.data")]
-    (with-open [wrtr (io/writer filepath)]
-      (.write wrtr (json/write-str ciks)))))
+  [ciks]
+  (write-json (str working-dir File/separator "ciks.data")))
 
-(defn read-ciks
-  [dir]
-  (let [filepath (str dir File/separator "ciks.data")
-        config-file (File. filepath)]
-    (if (.exists config-file)
-      (json/read-str (slurp filepath))
-      starter-ciks)))
+(defn read-ciks []
+  (let [ciks (read-json (str working-dir File/separator "ciks.data"))]
+    (if (empty? ciks)
+      starter-ciks
+      ciks)))
 
 (defn populate-ciks
   "read ciks from file, check tickers against ciks map

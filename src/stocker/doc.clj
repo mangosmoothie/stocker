@@ -1,5 +1,7 @@
 (ns stocker.doc
-  (:require [medley.core :refer [map-kv]]))
+  (:require [medley.core :refer [map-kv]]
+            [stocker.util :refer :all])
+  (:import (java.io File)))
 
 (defrecord Doc 
     [documentPeriodEndDate documentFiscalYearFocus documentFiscalPeriodFocus
@@ -18,3 +20,10 @@
    (assoc (map-kv #(vector (re-key %1) (first (first (vals %2)))) xbrl) 
           :path path)))
 
+(defn read-all-docs []
+  (let [filepath (str File/separator )]))
+
+(defn read-docs
+  "read all saved doc info"
+  [dir]
+  )

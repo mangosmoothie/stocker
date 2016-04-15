@@ -1,10 +1,33 @@
 (ns stocker.util
+  (:require [clojure.data.json :as json]
+            [clojure.java.io :as io])
   (:import (java.util Calendar)
            (java.util.zip ZipInputStream)
            (java.io File)
            (java.io FileOutputStream)
            (java.io FileInputStream)))
 
+(def config (json/read-str (slurp "config")))
+
+(def edgar-monthly-feed-base (get config "edgar-monthly-feed-base"))
+(def working-dir (get config "working-dir"))
+(def landingzone (get config "landingzone"))
+(def feed-cache (get config "feed-cache"))
+(def ticker-search-url (get config "ticker-search-url"))
+(def starter-tickers (get config "starter-tickers"))
+(def starter-ciks (get config "starter-ciks"))
+(def form-types #{"10-K" "10-Q"})
+
+(defn read-json
+  [filepath]
+  (if (.exists filepath)
+    (json/read-str (slurp filepath))
+    {}))
+
+(defn write-json
+  [filepath data]
+  (with-open [wrtr (io/writer filepath)]
+    (.write wrtr (json/write-str data))))
 
 (defn market-open? []
   (and (<= 9 (.get (Calendar/getInstance) Calendar/HOUR_OF_DAY) 15)
