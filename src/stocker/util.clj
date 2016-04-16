@@ -13,6 +13,7 @@
 (def working-dir (get config "working-dir"))
 (def landingzone (get config "landingzone"))
 (def feed-cache (get config "feed-cache"))
+(def doc-store (get config "doc-store"))
 (def ticker-search-url (get config "ticker-search-url"))
 (def starter-tickers (get config "starter-tickers"))
 (def starter-ciks (get config "starter-ciks"))
@@ -20,7 +21,7 @@
 
 (defn read-json
   [filepath]
-  (if (.exists filepath)
+  (if (.exists (File. filepath))
     (json/read-str (slurp filepath))
     {}))
 

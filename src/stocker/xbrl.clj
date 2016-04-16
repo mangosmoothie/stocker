@@ -179,7 +179,7 @@
 
 (defn get-report-dirs
   [cik dir year]
-  (filter #(.startsWith (.getName %) (str cik "-" (.substring (str 2016) 2))) 
+  (filter #(.startsWith (.getName %) (str cik "-" (.substring (str year) 2))) 
           (.listFiles (File. dir))))
 
 (defn find-10k
