@@ -142,8 +142,7 @@
                              (not (.endsWith (str %) "TextBlock"))) 
                        (keys a-map))))
 
-(defn write-ciks
-  [ciks]
+(defn write-ciks [ciks]
   (write-json (str working-dir File/separator "ciks.data")))
 
 (defn read-ciks []
@@ -173,12 +172,7 @@
         currmonth (if (< calmonth 9) (str "0" (inc calmonth)) (str (inc calmonth)))]
     (io/delete-file (str dir File/separator "xbrlrss-" curryear "-" currmonth ".xml"))))
 
-(defn get-xbrl-report
-  [dir]
-  ())
-
-(defn get-report-dirs
-  [cik dir year]
+(defn get-report-dirs [cik dir year]
   (filter #(.startsWith (.getName %) (str cik "-" (.substring (str year) 2))) 
           (.listFiles (File. dir))))
 

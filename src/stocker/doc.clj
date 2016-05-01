@@ -1,5 +1,5 @@
 (ns stocker.doc
-  (:require [medley.core :refer [map-kv]]
+  (:require [medley.core :refer [map-kv map-keys]]
             [stocker.util :refer :all]
             [stocker.xbrl :refer [parse-xbrl-dei]])
   (:import (java.io File)))
@@ -35,4 +35,8 @@
   (write-json (str working-dir File/separator "docs.data") docsmap))
 
 (defn read-docs "read all saved doc info" []
-  (read-json (str working-dir File/separator "docs.data")))
+  (map-kv #(vector %1 (map-keys keyword %2)) 
+          (read-json (str working-dir File/separator "docs.data"))))
+
+(defn get-latest-10k [cik]
+  ())
