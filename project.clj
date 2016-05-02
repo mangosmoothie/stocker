@@ -8,7 +8,9 @@
                  [org.clojure/tools.cli "0.3.3"]
                  [clojure-csv "2.0.1"]
                  [org.clojure/data.json "0.2.6"]
-                 [medley "0.7.4"]]
+                 [medley "0.7.4"]
+                 [org.postgresql/postgresql "9.4.1208"]
+                 [org.clojure/java.jdbc "0.6.0-alpha2"]]
   :profiles {:dev {:dependencies [[ring/ring-devel "1.4.0"]]}}
   :main stocker.core
   :aot [stocker.core])

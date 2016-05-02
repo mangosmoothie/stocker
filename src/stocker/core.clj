@@ -2,9 +2,12 @@
   (:gen-class)
   (:require [clj-http.client :as client]
             [clojure-csv.core :as csv]
+            [clojure.string :as s]
             [clojure.tools.cli :refer [parse-opts]]
             [clojure.pprint :refer [print-table]]
-            [stocker.util :refer :all])
+            [stocker.util :refer :all]
+            [stocker.xbrl :refer [get-cik]]
+            [stocker.company :as co])
   (:import (java.util Calendar)
            (java.text SimpleDateFormat)))
 
@@ -104,6 +107,17 @@
   (println (str "RETRIEVING QUOTE AT: " (current-datetime)))
   (print-update (get-stock-quotes portfolio))
   (Thread/sleep 300000))                                    ;poll every 5 minutes
+
+(defn get-companies [tickers]
+  (reduce
+   (fn [acc n]
+     (let [ticker (s/upper-case n)
+           cik (get-cik ticker)]
+       (if (contains? acc cik)
+         acc
+         (assoc acc cik (co/add-company {:cik cik :ticker ticker})))))
+   (co/get-all)
+   tickers))
 
 (defn session [portfolio]
   (while true

@@ -1,6 +1,7 @@
 (ns stocker.util
   (:require [clojure.data.json :as json]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [medley.core :refer [map-keys]])
   (:import (java.util Calendar)
            (java.util.zip ZipInputStream)
            (java.io File)
@@ -17,6 +18,7 @@
 (def ticker-search-url (get config "ticker-search-url"))
 (def starter-tickers (get config "starter-tickers"))
 (def starter-ciks (get config "starter-ciks"))
+(def db-spec (map-keys keyword (get (get config "conns") "local")))
 (def form-types #{"10-K" "10-Q"})
 
 (defn read-json

@@ -4,7 +4,8 @@
             [clj-http.client :as client]
             [clojure.pprint :refer [pprint]]
             [clojure.java.io :as io]
-            [clojure.data.json :as json])
+            [clojure.data.json :as json]
+            [stocker.company :as co])
   (:import (java.util Calendar)
            (java.io File)))
 
@@ -142,28 +143,6 @@
                              (not (.endsWith (str %) "TextBlock"))) 
                        (keys a-map))))
 
-(defn write-ciks [ciks]
-  (write-json (str working-dir File/separator "ciks.data")))
-
-(defn read-ciks []
-  (let [ciks (read-json (str working-dir File/separator "ciks.data"))]
-    (if (empty? ciks)
-      starter-ciks
-      ciks)))
-
-(defn populate-ciks
-  "read ciks from file, check tickers against ciks map
-  use sec ticker search to find missing ciks of the company"
-  [tickers dir]
-  (let [ciks (read-ciks dir)
-        new-tickers (filter #(not (contains? ciks %)) tickers)]
-    (merge ciks
-           (reduce
-            (fn [acc ticker]
-              (assoc acc ticker (get-cik ticker)))
-            {}
-            new-tickers))))
-
 (defn remove-current-rss-feed
   "removes the cached rss feed for the current month"
   [dir]
@@ -176,24 +155,13 @@
   (filter #(.startsWith (.getName %) (str cik "-" (.substring (str year) 2))) 
           (.listFiles (File. dir))))
 
-(defn find-10k
-  [cik reportcache year]
-  (let [dirs (get-report-dirs cik reportcache year)]
-    (loop [dir dirs
-           file (get-xbrl-report dir)]
-      ())))
-
-(defn find-latest-10k
-  [cik dir]
-  ())
-
 (defn get-artifacts-for-year
   "retrieves artifacts by monthly historical rss feeds for year"
   [year]
   (println "fetching rss feeds for year: " year)
   (println "output dir is: " landingzone)
   (println "duplicates will not be overwritten")
-  (let [ciks (populate-ciks starter-tickers working-dir)
+  (let [ciks (co/get-all)
         urls (get-xbrl-zip-urls year form-types (vals (read-ciks working-dir)) feed-cache)]
     (write-ciks working-dir ciks)
     (doseq [url urls]
