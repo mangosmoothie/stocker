@@ -155,22 +155,22 @@
   (filter #(.startsWith (.getName %) (str cik "-" (.substring (str year) 2))) 
           (.listFiles (File. dir))))
 
-(defn get-artifacts-for-year
-  "retrieves artifacts by monthly historical rss feeds for year"
-  [year]
-  (println "fetching rss feeds for year: " year)
-  (println "output dir is: " landingzone)
-  (println "duplicates will not be overwritten")
-  (let [ciks (co/get-all)
-        urls (get-xbrl-zip-urls year form-types (vals (read-ciks working-dir)) feed-cache)]
-    (write-ciks working-dir ciks)
-    (doseq [url urls]
-      (download-file url landingzone))
-    (println "all files accounted for. processed url count: " (count urls))
-    (if (= year (.get (Calendar/getInstance) (Calendar/YEAR)))
-      (do
-        (println "removing current rss feed cache")
-        (remove-current-rss-feed feed-cache)))))
+;; (defn get-artifacts-for-year
+;;   "retrieves artifacts by monthly historical rss feeds for year"
+;;   [year]
+;;   (println "fetching rss feeds for year: " year)
+;;   (println "output dir is: " landingzone)
+;;   (println "duplicates will not be overwritten")
+;;   (let [ciks (co/get-all)
+;;         urls (get-xbrl-zip-urls year form-types (vals (read-ciks working-dir)) feed-cache)]
+;;     (write-ciks working-dir ciks)
+;;     (doseq [url urls]
+;;       (download-file url landingzone))
+;;     (println "all files accounted for. processed url count: " (count urls))
+;;     (if (= year (.get (Calendar/getInstance) (Calendar/YEAR)))
+;;       (do
+;;         (println "removing current rss feed cache")
+;;         (remove-current-rss-feed feed-cache)))))
 
 (defn parse-rss-feed-links-for-year
   "get rss links from index for a given year"

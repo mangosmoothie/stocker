@@ -2,7 +2,7 @@
   (:require [clojure.data.json :as json]
             [clojure.java.io :as io]
             [medley.core :refer [map-keys]])
-  (:import (java.util Calendar)
+  (:import (java.util Calendar UUID)
            (java.util.zip ZipInputStream)
            (java.io File)
            (java.io FileOutputStream)
@@ -31,6 +31,16 @@
   [filepath data]
   (with-open [wrtr (io/writer filepath)]
     (.write wrtr (json/write-str data))))
+
+(defn hash-string
+  "hash given string and return a java.util.UUID"
+  ([string] (hash-string string "MD5" 16))
+  ([string algo base]
+   (let [hashed
+         (doto (java.security.MessageDigest/getInstance algo)
+           (.reset)
+           (.update (.getBytes string)))]
+     (UUID/nameUUIDFromBytes (.digest hashed)))))
 
 (defn market-open? []
   (and (<= 9 (.get (Calendar/getInstance) Calendar/HOUR_OF_DAY) 15)
